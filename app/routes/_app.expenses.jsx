@@ -1,6 +1,8 @@
-import {Link, Outlet} from '@remix-run/react';
+import {Link, Outlet, useLoaderData} from '@remix-run/react';
 import ExpensesList from '../components/expenses/ExpensesList'
 import { FaPlus, FaDownload } from 'react-icons/fa';
+import {getExpenses} from '../data/expenses.server';
+
 const DUMMY_EXPENSES = [
     {
       id: 'e1',
@@ -17,6 +19,9 @@ const DUMMY_EXPENSES = [
   ];
 
 export default function ExpensesPage(){
+  const expenses = useLoaderData();
+  //console.log(expenses);
+
     return( 
         <>
             <Outlet />
@@ -31,10 +36,12 @@ export default function ExpensesPage(){
                   <FaDownload/>
                   <a href="expenses.raw">Load Raw Data</a>
                 </section>
-                <ExpensesList expenses={DUMMY_EXPENSES}/>
+                <ExpensesList expenses={expenses}/>
             </main>
         </>
-
     );
 }
 
+export function loader(){
+  return getExpenses();
+}
